@@ -4,7 +4,7 @@ const User = require("../Model/userSchema");
 const userServices = require("../Services/userServices");
 const { sendResponse } = require("../Utlis/common");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 
 
 
