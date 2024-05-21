@@ -2,6 +2,7 @@ const Customer = require("../Model/customerSchema");
 const Feedback = require("../Model/feedbacksSchema");
 const sequelize = require('../Utlis/sequelize'); // Import the common Sequelize instance
 const { QueryTypes } = require('sequelize');
+
 exports.customer = async ( { assign_to} )  => {
   console.log("assign_to",assign_to)
   return await Customer.findAll({ where: {
@@ -21,7 +22,7 @@ exports.allcustomer = async ()  => {
   return await Customer.findAll();
 };
 
-exports.submitFeedback = async ({ customername, taskTitle, feedback, submittedby_username, remark, submittedby_userId})  => {
+exports.submitFeedback = async ({ customername, taskTitle, feedback, submittedby_username, remark,calltimer, submittedby_userId})  => {
   // Create feedback
   return await Feedback.create({
     customername,
@@ -29,6 +30,7 @@ exports.submitFeedback = async ({ customername, taskTitle, feedback, submittedby
     feedback,
     submittedby_username,
     remark,
+    calltimer,
     submittedby_userId
   });
 

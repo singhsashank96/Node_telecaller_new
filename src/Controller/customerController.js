@@ -1,6 +1,9 @@
 const express = require("express");
 const customerController = express.Router();
 const Customer = require("../Model/customerSchema");
+const payment = require("../Model/paymentSchema");
+
+const Booking = require("../Model/bookingSchema");
 const customerServices = require("../Services/customerServices");
 const { sendResponse } = require("../Utlis/common");
 const jwt = require("jsonwebtoken");
@@ -70,11 +73,11 @@ customerController.get("/getCustomers", async (req, res) => {
 
 customerController.post("/submit-feedback", async (req, res) => {
   try {
-    const { customername, taskTitle, feedback, submittedby_username, remark, submittedby_userId } = req.body;
+    const { customername, taskTitle, feedback, submittedby_username, remark, calltimer, submittedby_userId } = req.body;
     if (!customername || !taskTitle || !feedback|| !submittedby_username || !remark ) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
-    const submittedFeedback = await customerServices.submitFeedback({ customername, taskTitle, feedback, submittedby_username, remark, submittedby_userId })
+    const submittedFeedback = await customerServices.submitFeedback({ customername, taskTitle, feedback, submittedby_username, remark, calltimer,submittedby_userId })
     sendResponse(res, 200, "Success", {
       message: "Feedback submitted successfully",
     });
@@ -88,25 +91,7 @@ customerController.post("/submit-feedback", async (req, res) => {
 });
 
 
-customerController.get("/sample-count", async (req, res) => {
-  try {
-    const { user_id } = req.body;
-    if (!user_id) {
-      return res.status(400).json({ error: 'Missing user_id parameter' });
-    }
-    const sampleCounts = await customerServices.getSampleCount({user_id})
-    sendResponse(res, 200, "Success", {
-      message: "Sample count for user_id:- " + user_id + " with tilesName retrieved successfully",
-      TotalCount: sampleCounts[0].row_count
-    });
-  } catch (error) {
-    // Handle errors
-    console.error('Error retrieving sample counts:', error);
-    sendResponse(res, 500, "Failed", {
-      message: "Server Error retrieving sample counts"
-    });
-  }
-});
+
 
 
 module.exports = customerController;
