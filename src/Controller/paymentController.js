@@ -1,46 +1,40 @@
 const express = require("express");
 const paymentController = express.Router();
-const Booking = require("../Model/bookingSchema");
 const paymentServices = require("../Services/paymentServices");
 const { sendResponse } = require("../Utlis/common");
 const jwt = require("jsonwebtoken");
 //const bcrypt = require('bcrypt');
 
-
-
-
-paymentController.get("/getpendingsamples", async (req, res) => {
+// POST request for retrieving pending samples
+paymentController.post("/getpendingsamples", async (req, res) => {
   try {
     const { user_id } = req.body;
-    const bookings = await paymentServices.getPendingSamples(user_id)
-    // Return the matching customers as the API response
+    const bookings = await paymentServices.getPendingSamples(user_id);
     sendResponse(res, 200, "Success", {
-      message: "Pending samples retrieve successfully",
+      message: "Pending samples retrieved successfully",
       userData: bookings
     });
   } catch (error) {
-    // Handle errors
     console.error('Error:', error);
     sendResponse(res, 500, "Failed", {
-      message: "Server Error while retrieving all customer data "
+      message: "Server Error while retrieving pending samples"
     });
   }
 });
 
-paymentController.get("/getdeliveredsamples", async (req, res) => {
+// POST request for retrieving delivered samples
+paymentController.post("/getdeliveredsamples", async (req, res) => {
   try {
     const { user_id } = req.body;
-    const deliveredSamples = await paymentServices.getDeliveredSamples(user_id)
-    // Return the matching customers as the API response
+    const deliveredSamples = await paymentServices.getDeliveredSamples(user_id);
     sendResponse(res, 200, "Success", {
-      message: "Delivered samples retrieve successfully",
+      message: "Delivered samples retrieved successfully",
       userData: deliveredSamples
     });
   } catch (error) {
-    // Handle errors
     console.error('Error:', error);
     sendResponse(res, 500, "Failed", {
-      message: "Server Error while retrieving all customer data "
+      message: "Server Error while retrieving delivered samples"
     });
   }
 });
