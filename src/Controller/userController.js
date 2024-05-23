@@ -50,6 +50,24 @@ userController.post("/login", async (req, res) => {
   }
 });
 
+userController.get("/profile", async (req, res) => {
+  try {
+    const { userId } = req.body;  
+    // Retrieve the user based on the provided email
+    const loggedUser = await userServices.profile({ userId });
+
+    // Send success response with token
+    sendResponse(res, 200, "Success", {
+      message: "Logged in successfully",
+      userData:  loggedUser
+    });
+  } catch (error) {
+    console.error(error);
+    sendResponse(res, 500, "Failed", {
+      message: "Internal server error"
+    });
+  }
+});
 
 
 

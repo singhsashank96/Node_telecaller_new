@@ -13,6 +13,12 @@ exports.login = async ( { email, mobile } )  => {
 };
 
 
+exports.profile = async ( { userId} )  => {
+  return await User.findOne({ where: {
+    userId
+} });
+};
+
 
 
 

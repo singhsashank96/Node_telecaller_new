@@ -14,6 +14,16 @@ exports.getPendingSamples = async (userId) => {
       raw: true
     });
 
+    if (payments.length === 0) {
+      // If no payments found for the user ID, handle accordingly
+      // For example, throw an error, return an empty array, or log a message
+      console.log('No samples found for the provided user ID');
+      // Depending on your requirement, you might throw an error or return an empty array
+      return  ""
+    } else {
+      // Continue processing the payments data
+    
+
     // Extract tile IDs from the payment records
     const tileIdsInPayment = payments.map(payment => payment.tilesName);
 
@@ -42,6 +52,8 @@ exports.getPendingSamples = async (userId) => {
     });
 
     return pendingSamples;
+  }
+  
   } catch (error) {
     console.error("Error fetching sample information:", error);
     throw new Error("Internal server error");
@@ -58,6 +70,16 @@ exports.getDeliveredSamples = async (user_id) => {
       attributes: ['tilesName', 'sizesName', 'sampleCount'], // Select only required columns
       raw: true // Get raw data
     });
+
+    console.log(payments.length);
+    if (payments.length === 0) {
+      // If no payments found for the user ID, handle accordingly
+      // For example, throw an error, return an empty array, or log a message
+      console.log('No samples found for the provided user ID');
+      // Depending on your requirement, you might throw an error or return an empty array
+      return ""
+    } 
+    else {
 
     // Extract tile IDs and size IDs from payment records
     const tileIds = payments.map(payment => payment.tilesName);
@@ -96,6 +118,7 @@ exports.getDeliveredSamples = async (user_id) => {
     });
 
     return tileInfo
+  }
   } catch (error) {
     console.error("Error fetching sample information:", error);
     throw new Error("Internal server error");
