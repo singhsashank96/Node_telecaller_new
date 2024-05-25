@@ -92,6 +92,66 @@ customerController.post("/submit-feedback", async (req, res) => {
 
 
 
+customerController.get("/getcity", async (req, res) => {
+  try {
+    const tasks = await customerServices.getCity()
+
+     // Organize the data into a hierarchy
+    //  const hierarchy = {};
+
+    //  tasks.forEach(task => {
+    //    // Check if the vname exists in the hierarchy
+    //    if (!hierarchy.hasOwnProperty(task.vname)) {
+    //      // If not, create a new entry for the vname
+    //      hierarchy[task.vname] = {};
+    //    }
+ 
+    //    // Check if the aname exists under the vname
+    //    if (!hierarchy[task.vname].hasOwnProperty(task.aname)) {
+    //      // If not, create a new entry for the aname
+    //      hierarchy[task.vname][task.aname] = [];
+    //    }
+ 
+    //    // Add the state under the aname
+    //    hierarchy[task.vname][task.aname].push(task.state);
+    //  });
+ 
+
+    /// Initialize an empty object to hold the city data
+    const cityMap = {};
+
+    tasks.forEach(task => {
+      // If the city already exists in the cityMap, add the area to its list
+      if (cityMap.hasOwnProperty(task.vname)) {
+        cityMap[task.vname].areas.push(task.aname);
+      } else {
+        // If the city does not exist, initialize it with the area as the first entry
+        cityMap[task.vname] = {
+          city: task.vname,
+          areas: [task.aname],
+          state: task.state
+        };
+      }
+    });
+
+    // Convert the cityMap object to an array of city objects
+    const response = Object.values(cityMap);
+
+     // Log the hierarchy
+     console.log(response);
+
+     sendResponse(res, 200, "Success", {
+      message: "All  city data retrieve successfully",
+      userData: response
+    });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    sendResponse(res, 500, "Failed", {
+      message: "Server Error while submitting feedback "
+    });
+  }
+});
 
 
 module.exports = customerController;

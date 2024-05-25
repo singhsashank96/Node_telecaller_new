@@ -45,4 +45,13 @@ exports.getSampleCount = async ({ user_id})  => {
       replacements: { user_id: user_id }
     }
   );
+
+};
+
+exports.getCity = async ()  => {
+  const city = await Customer.findAll({
+    attributes: ['vname', 'aname', 'state'] // Select the required fields
+  });
+
+return city
 };
