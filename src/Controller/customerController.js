@@ -74,21 +74,34 @@ customerController.get("/getCustomers", async (req, res) => {
 customerController.post("/submit-feedback", async (req, res) => {
   try {
     const { customername, taskTitle, feedback, submittedby_username, remark, calltimer, submittedby_userId } = req.body;
-    if (!customername || !taskTitle || !feedback|| !submittedby_username || !remark ) {
+
+    // Check if required fields are missing
+    if (!customername || !taskTitle || !feedback || !submittedby_username) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
-    const submittedFeedback = await customerServices.submitFeedback({ customername, taskTitle, feedback, submittedby_username, remark, calltimer,submittedby_userId })
+
+    // Submit feedback (including optional remark)
+    const submittedFeedback = await customerServices.submitFeedback({
+      customername,
+      taskTitle,
+      feedback,
+      submittedby_username,
+      remark, // Include remark if provided
+      calltimer,
+      submittedby_userId
+    });
+
     sendResponse(res, 200, "Success", {
       message: "Feedback submitted successfully",
     });
   } catch (error) {
-    // Handle errors
     console.error('Error:', error);
     sendResponse(res, 500, "Failed", {
-      message: "Server Error while submitting feedback "
+      message: "Server Error while submitting feedback"
     });
   }
 });
+
 
 
 

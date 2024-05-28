@@ -1,6 +1,6 @@
 const express = require("express");
 const feedbackSchemaController = express.Router();
-const feedbackStatusServices = require("../Services/feedbackStatusServices");
+const responseServices = require("../Services/responseServices");
 const { sendResponse } = require("../Utlis/common");
 const jwt = require("jsonwebtoken");
 //const bcrypt = require('bcrypt');
@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 
 feedbackSchemaController.get("/getFeedbackStrings", async (req, res) => {
   try {
-    const status = await feedbackStatusServices.GetFeedbackStatusString()
+    const status = await responseServices.GetFeedbackStatusString()
     // Return the matching customers as the API response
     sendResponse(res, 200, "Success", {
       message: "All Feedback status strings retrieve successfully",
