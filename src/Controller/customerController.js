@@ -167,4 +167,25 @@ customerController.get("/getcity", async (req, res) => {
 });
 
 
+customerController.post("/getCompletedCalllist", async (req, res) => {
+  try {
+
+    // Parse the user ID from the request body
+    const submittedby_username = req.body.submittedby_username;
+    const completedCallList = await customerServices.GetCompletedFeedback({ submittedby_username })
+    // Return the matching customers as the API response
+    sendResponse(res, 200, "Success", {
+      message: "Assigned user customer completed call list retrieve successfully",
+      userData: completedCallList
+    });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    sendResponse(res, 500, "Failed", {
+      message: "Server Error while retrieving completed Call List "
+    });
+  }
+});
+
+
 module.exports = customerController;

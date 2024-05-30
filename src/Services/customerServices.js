@@ -55,3 +55,15 @@ exports.getCity = async ()  => {
 
 return city
 };
+
+exports.GetCompletedFeedback = async ({submittedby_username})  => {
+  const completedCallList = await Feedback.findAll({
+    where: {
+      submittedby_username: submittedby_username
+  }
+  });
+
+return completedCallList
+
+};
+
