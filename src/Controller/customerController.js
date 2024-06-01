@@ -103,8 +103,6 @@ customerController.post("/submit-feedback", async (req, res) => {
 });
 
 
-
-
 customerController.get("/getcity", async (req, res) => {
   try {
     const tasks = await customerServices.getCity()
@@ -166,7 +164,6 @@ customerController.get("/getcity", async (req, res) => {
   }
 });
 
-
 customerController.post("/getCompletedCalllist", async (req, res) => {
   try {
 
@@ -187,5 +184,39 @@ customerController.post("/getCompletedCalllist", async (req, res) => {
   }
 });
 
+customerController.post("/getFreshLead", async (req, res) => {
+  try {
+    const { assign_to } = req.body;
+    // Query the database for customers assigned to the specified user ID
+    const assignedCustomers = await customerServices.customer({ assign_to });
+
+    const finalList = await customerServices.isFeedbackExists({ assignedCustomers });
+console.log("finalist",finalList)
+
+const formattedList = finalList.map(item => {
+  // Extracting only the dataValues property
+  const { dataValues } = item;
+  // Adding the isExist property to the customer object
+  dataValues.isFeedbackExist = item.isExist;
+  // Adding feedback, remark, and calltimer fields to the customer object
+  dataValues.feedback = item.feedback;
+  dataValues.remark = item.remark;
+  dataValues.calltimer = item.calltimer;
+  return dataValues;
+});
+console.log("formattedList",formattedList)
+    // Return the modified response as the API response
+    sendResponse(res, 200, "Success", {
+      message: "Assigned user customer data retrieve successfully",
+      userData: formattedList
+    });
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+    sendResponse(res, 500, "Failed", {
+      message: "Server Error while retrieving customer data"
+    });
+  }
+});
 
 module.exports = customerController;

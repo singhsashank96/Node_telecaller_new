@@ -67,3 +67,47 @@ return completedCallList
 
 };
 
+// exports.isFeedbackExists = async ({ assignedCustomers }) => {
+//     // Loop through assigned customers array
+//     for (let i = 0; i < assignedCustomers.length; i++) {
+//       // Check if feedback exists for the customer
+//       const feedbackExists = await Feedback.findOne({ where: { customername: assignedCustomers[i].fname } });
+  
+//       // Add isExist key to customer object with the appropriate boolean value
+//       assignedCustomers[i].isExist = !!feedbackExists; // true if feedbackExists, otherwise false
+
+//     }
+  
+//     // Return the modified assigned customers array
+//     return assignedCustomers;
+//   };
+
+exports.isFeedbackExists = async ({ assignedCustomers }) => {
+  try {
+      // Loop through assigned customers array
+      for (let i = 0; i < assignedCustomers.length; i++) {
+          // Find feedback for the customer
+          const feedback = await Feedback.findOne({ where: { customername: assignedCustomers[i].fname } });
+
+          // If feedback exists, add it to the customer object
+          if (feedback) {
+              assignedCustomers[i].feedback = feedback.feedback;
+              assignedCustomers[i].remark = feedback.remark;
+              assignedCustomers[i].calltimer = feedback.calltimer;
+          } else {
+              // If no feedback found, set default values
+              assignedCustomers[i].feedback = null;
+              assignedCustomers[i].remark = null;
+              assignedCustomers[i].calltimer = null;
+          }
+
+          // Add isExist key to customer object with the appropriate boolean value
+          assignedCustomers[i].isExist = !!feedback; // true if feedback exists, otherwise false
+      }
+
+      // Return the modified assigned customers array
+      return assignedCustomers;
+  } catch (error) {
+      throw new Error('Error fetching feedback: ' + error.message);
+  }
+};
